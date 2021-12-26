@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U17：快速體驗 API + DOM Event</title>
+  <script src="/Public/js/axios.min.js"></script>
+</head>
+
+<body>
+  <h1>API Exercise</h1>
+  <button>get lyrics</button>
+  <div id="show"></div>
+
+  <script>
+    let button = document.querySelector('button')
+    let show = document.querySelector('#show')
+    document.addEventListener('click', event => {
+      axios.get('https://api.lyrics.ovh/v1/Coldplay/yellow')
+        .then(response => {
+          console.log(response)
+          show.innerHTML = response.data.lyrics
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    })
+  </script>
+</body>
+
+</html>

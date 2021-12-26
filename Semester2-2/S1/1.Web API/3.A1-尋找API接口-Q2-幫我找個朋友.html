@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1-尋找API接口-Q2-幫我找個朋友</title>
+  <link rel="stylesheet" href="/Public/css/bootstrap.min.css">
+  <script src="/Public/js/jquery.min.js"></script>
+  <script src="/Public/js/bootstrap.bundle.min.js"></script>
+  <script src="/Public/js/axios.min.js"></script>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <button class="btn btn-primary" id="random-user">Random User</button>
+    <h3 id="user-name"></h3>
+    <img id="user-image" src="#" alt="">
+    <div id="user-email"></div>
+  </div>
+
+  <img src="#" alt="">
+  <script>
+    document.querySelector("#random-user").addEventListener('click', event => {
+      axios.get('https://randomuser.me/api/')
+        .then(res => {
+          let data = res.data.results[0]
+          document.querySelector("#user-name").textContent = data.name.first + ' ' + data.name.last
+          document.querySelector("#user-image").src = data.picture.large
+          document.querySelector("#user-email").textContent = data.email
+        })
+        .catch(err => {
+          alert('獲取資料失敗')
+          console.error(err);
+        })
+    })
+
+  </script>
+</body>
+
+</html>
