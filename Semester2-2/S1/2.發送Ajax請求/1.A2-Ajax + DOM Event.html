@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2: Ajax + DOM Event </title>
+    <link rel="stylesheet" href="/Public/css/bootstrap.min.css">
+    <script src="/Public/js/jquery.min.js"></script>
+    <script src="/Public/js/bootstrap.bundle.min.js"></script>
+    <script src="/Public/js/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <button class="btn btn-primary mt-2 mb-2 ml-1" id="find-girls">Find 3 Girls</button>
+        <div class="d-flex flex-wrap text-center card-content"></div>
+    </div>
+    <script>
+        const cardContent = document.querySelector(".card-content")
+        document.querySelector("#find-girls").addEventListener('click', event => {
+            let content = cardContent.innerHTML
+            
+            axios.get('https://randomuser.me/api/?results=3&gender=female&noinfo')
+                .then(response => {
+                    response.data.results.forEach(item => {
+                        content += `
+                        <div class="card m-1">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.name.first + ' ' + item.name.last}</h5>
+                                <img src="${item.picture.large}" alt="...">
+                                <p class="card-text">${item.email}}</p>
+                            </div>
+                        </div>
+                        `
+                    });
+                    cardContent.innerHTML = content
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        })
+    </script>
+</body>
+</html>
