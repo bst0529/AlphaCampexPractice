@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4: TodoList 體驗強化版</title>
+    <link rel="stylesheet" href="/Public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Public/css/font-awesome.min.css">
+    <script src="/Public/js/jquery.min.js"></script>
+    <script src="/Public/js/bootstrap.bundle.min.js"></script>
+    <script src="/Public/js/axios.min.js"></script>
+</head>
+<body>
+    <div class="container mt-3" style="width: 800px;background: pink;">
+        <h3>代辦事項</h3>
+        <div class="d-flex mb-1">
+            <div style="flex-grow: 1;" class="mr-1">
+                <input type="text" class="form-control" id="add-content"/>
+            </div>
+            <button class="btn btn-info" id="add-new">新增</button>
+        </div>
+        <div id="all-items">
+            <div class="mb-2">
+                <h5 class="mb-0">代辦</h5>
+                <div id="todo"></div>
+            </div>
+            <div>
+                <h5 class="mb-0">完成</h5>
+                <div id="done"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const addContent = document.querySelector("#add-content")
+        const allItems = document.querySelector("#all-items")
+        const todo = document.querySelector("#todo")
+        const done = document.querySelector("#done")
+        let todoList = []
+        let downList = []
+        document.querySelector("#add-new").addEventListener('click', event => {
+            if (addContent.value == '') {
+                alert('請填寫內容')
+                return
+            }
+            if (todoList.includes(addContent.value)) {
+                alert('代辦事項已包含【' + addContent.value + '】')
+                return
+            }
+            todoList.push(addContent.value)
+            bindTodoOrDone('todoList');
+            addContent.value = ''
+        })
+        allItems.addEventListener('click', event => {
+            console.log(event.target)
+            if (event.target.matches('.delete')) {
+                if (!confirm('確定刪除?')) return
+                let index = parseInt(event.target.dataset.index, 10)
+                if (event.target.matches('.my-todo-list')) {
+                    todoList.splice(index,1)
+                    bindTodoOrDone('todoList')
+                } else{
+                    downList.splice(index,1)
+                    bindTodoOrDone('downList')
+                }
+            }
+        })
+        function bindTodoOrDone(typeName){
+            let list = null;
+            let listTag = null;
+            switch (typeName) {
+                case 'todoList':
+                    list = todoList;
+                    listTag = todo
+                    break;
+                case 'downList':
+                    list = downList;
+                    listTag = done
+                    break;
+            }
+            if (list === null) return;
+            let str = ''
+            list.forEach((item,index) => {
+                str += `
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex item-content" style="flex-grow: 1;">
+                        <div style="flex-basis: 20px;">${index + 1}.</div>
+                        <div style="flex-grow: 1;">${item}</div>
+                    </div>
+                    <i class="delete ${typeName === "todoList" ? "my-todo-list" : "my-done-list"} fa fa-trash" style="cursor: pointer;" data-index='${index}'></i>
+                </div>
+                `
+            })
+            listTag.innerHTML = str
+        }
+    </script>
+</body>
+</html>
